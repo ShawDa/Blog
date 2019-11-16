@@ -29,7 +29,7 @@ JetBrains 公司旗下其它产品：
 |<kbd>Ctrl</kbd> + <kbd>W</kdb>|递进式选择代码块。可选中光标所在的单词或段落，连续按会在原有选中的基础上再扩展选中范围，直到整个文件被选中|
 |<kbd>Ctrl</kbd> + <kbd>E</kdb>|显示最近打开的文件记录列表|
 |<kbd>Ctrl</kbd> + <kbd>N</kdb>|根据输入的 **类名** 查找类文件|
-|<kbd>Ctrl</kbd> + <kbd>G</kdb>|在当前文件跳转到指定行处|
+|<kbd>Ctrl</kbd> + <kbd>G</kdb>|**在当前文件跳转到指定行处**|
 |<kbd>Ctrl</kbd> + <kbd>J</kdb>|插入自定义动态代码模板|
 |<kbd>Ctrl</kbd> + <kbd>P</kdb>|方法参数提示显示，写代码时查看调用方法的参数情况|
 |<kbd>Ctrl</kbd> + <kbd>Q</kdb>|光标所在的变量 / 类名 / 方法名等上面，显示文档内容|
@@ -62,7 +62,7 @@ JetBrains 公司旗下其它产品：
 |<kbd>Alt</kbd> + <kbd>\`</kbd>|显示版本控制常用操作菜单弹出层|
 |<kbd>Alt</kbd> + <kbd>F3</kbd>|选中文本，按F3逐个往下查找相同文本，并高亮显示|
 |<kbd>Alt</kbd> + <kbd>F7</kbd>|查找光标所在的方法 / 变量 / 类被调用的地方，Find Usages|
-|<kbd>Alt</kbd> + <kbd>Enter</kbd>|IntelliJ IDEA 根据光标所在问题，提供快速修复选择，光标放在的位置不同提示的结果也不同|
+|<kbd>Alt</kbd> + <kbd>Enter</kbd>|**IntelliJ IDEA 根据光标所在问题，提供快速修复选择，光标放在的位置不同提示的结果也不同**|
 |<kbd>Alt</kbd> + <kbd>Insert</kbd>|代码自动生成，如生成对象的 set / get 方法，构造函数，toString() 等|
 |<kbd>Alt</kbd> + <kbd>前方向键</kbd>|当前光标跳转到当前文件的前一个方法名位置|
 |<kbd>Alt</kbd> + <kbd>后方向键</kbd>|当前光标跳转到当前文件的后一个方法名位置|
@@ -87,7 +87,7 @@ JetBrains 公司旗下其它产品：
 |<kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>|对选中的代码弹出环绕选项弹出层，如if-else，try-catch等|
 |<kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>B</kbd>|在某个调用的方法名上使用会跳到具体的实现处，可以跳过接口，goto implementation|
 |<kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>S</kbd>|打开 IntelliJ IDEA 系统设置|
-|<kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>U</kbd>|类图快捷键，看源码很有用|
+|<kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>U</kbd>|类图快捷键，看源码很有用（**Ultimate**）|
 |<kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>F7</kbd>|显示使用的地方，寻找被该类或是变量被调用的地方，用弹出框的方式找出来|
 |<kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Enter</kbd>|光标所在行上空出一行，光标定位到新行|
 |<kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Home</kbd>|弹出跟当前文件有关联的文件弹出层|
@@ -139,3 +139,14 @@ JetBrains 公司旗下其它产品：
 |<kbd>F12</kbd>|回到前一个工具窗口，如你之前打开了Terminal又关了，按下后又打开了|
 |<kbd>Tab</kbd>|缩进|
 |<kbd>Double Shift</kbd>|弹出 `Search Everywhere` 弹出层|
+
+### 3.好用的插件
+IDEA里面刷不出来，建议直接去 [网站](https://plugins.jetbrains.com/) 上下载。
+
+|名称|介绍|
+|:-------------------|:-----------------------------------------|
+| Markdown Navigator | 官方的Markdown插件功能很鸡肋，用这个会好很多 |
+|     .ignore        | 版本控制会用到的忽略文件生成工具 |
+|Translation|右键一下，立马翻译|
+|Key Promoter|它会记录你鼠标点击可以替换为快捷键的情况和次数|
+|SequenceDiagram|右键点击方法名，选选择Sequence Diagram，再根据自己的情况设置深度即可生成时序图|
