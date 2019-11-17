@@ -4,5 +4,8 @@
 
 [TestGradle](../Code/TestGradle) 是基于 IDEA 构建的一个简易 Java Gradle 项目。  
 其中 src 文件夹下包括 main 和 test 两个文件夹，分别用来写源码和测试代码；  
+build 文件夹包括编译生成的 class 文件；  
 gradle/wrapper 下的 gradle-wrapper.properties 文件 配置本地路径，建议自己再环境变量中指定 GRADLE_USER_HOME；  
-gradle 默认只执行当前目录下的 build.gradle 脚本，如果项目中存在多模块依赖，那么就要在 settings.gradle 文件中中 include 这些模块的路径；
+gradle 默认只执行当前目录下的 build.gradle 脚本，如果项目中存在多模块依赖，那么就要在 settings.gradle 文件中中 include 这些模块的路径；  
+build.gradle 文件主要包括仓库 repositories 和依赖 dependencies，建议将阿里云 Maven 仓库加入；
+gradlew 和 gradlew.bat 分别是在 Unix 和 Windows 上执行 gradle 任务的 bat、shell 脚本。
