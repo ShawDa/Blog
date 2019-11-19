@@ -7,8 +7,9 @@
 [Java关键字](Java基础/Java关键字.md)  
 [IDEA](Java基础/IDEA.md)  
 [Maven](Java基础/Maven.md)  
-[Gradle](Java基础/Gradle.md)
-[数据类型](Java基础/数据类型.md)
+[Gradle](Java基础/Gradle.md)  
+[数据类型](Java基础/数据类型.md)  
+[面向对象](Java基础/面向对象.md)
 
 ## 容器
 [Collection和Map](容器/Collection和Map.md)
