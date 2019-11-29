@@ -9,7 +9,8 @@
 [Maven](Java基础/Maven.md)  
 [Gradle](Java基础/Gradle.md)  
 [数据类型](Java基础/数据类型.md)  
-[面向对象](Java基础/面向对象.md)
+[面向对象](Java基础/面向对象.md)  
+[常用类](Java基础/常用类.md)
 
 ## 容器
 [Collection和Map](容器/Collection和Map.md)
