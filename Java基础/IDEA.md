@@ -150,3 +150,4 @@ IDEA里面刷不出来，建议直接去 [网站](https://plugins.jetbrains.com/
 |Translation|右键一下，立马翻译|
 |Key Promoter|它会记录你鼠标点击可以替换为快捷键的情况和次数|
 |SequenceDiagram|右键点击方法名，选选择Sequence Diagram，再根据自己的情况设置深度即可生成时序图|
+|Lombok|通过简单的注解来代替一些代码|
