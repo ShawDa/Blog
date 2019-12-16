@@ -3,6 +3,7 @@ package cn.shawda.testreflect;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class TestReflect {
     public static void main(String[] args)
@@ -90,6 +91,29 @@ public class TestReflect {
         System.out.println("person5 = " + person5);  // Person(publicString=null, protectedString=null, defaultString=null, privateString=null, name=shawda5, age=0)
 
         // 4 获取方法
-        // 4.1
+        // 4.1 获取所有public方法
+        Method[] methods = forNamePersonClass.getMethods();
+        for (Method method : methods) {
+            System.out.println("method = " + method);  // 获取的方法包括自己的(注解里的也有)和继承父类的
+        }
+
+        // 4.2 获取有参方法
+        Method methodWithParams = forNamePersonClass.getMethod("eat", String.class, int.class);
+        Person person6 = new Person();
+        Object retValue6 = methodWithParams.invoke(person6, "apple", 2);
+        System.out.println("retValue6 = "  + retValue6);  // eat 2 apple
+
+        // 4.3 获取无参方法
+        Method methodWithoutParams = forNamePersonClass.getMethod("eat");
+        Person person7 = new Person();
+        Object retValue7 = methodWithoutParams.invoke(person7);
+        System.out.println("retValue7 = "  + retValue7);  // eat
+
+        // 4.4 获取私有方法
+        Method privateMethod = forNamePersonClass.getDeclaredMethod("eat", String.class);
+        privateMethod.setAccessible(true);
+        Person person8 = new Person();
+        Object retValue8 = privateMethod.invoke(person8, "orange");
+        System.out.println("retValue8 = "  + retValue8);  // eat orange
     }
 }

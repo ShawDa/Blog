@@ -27,4 +27,16 @@ public class Person {
         this.name = name;
         this.age = age;
     }
+
+    public String eat() {
+        return "eat";
+    }
+
+    private String eat(String fruit) {
+        return "eat " + fruit;
+    }
+
+    public String eat(String fruit, int num) {
+        return "eat " + num + " " + fruit;
+    }
 }
