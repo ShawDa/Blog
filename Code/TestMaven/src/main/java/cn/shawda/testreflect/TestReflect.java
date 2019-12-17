@@ -1,13 +1,19 @@
 package cn.shawda.testreflect;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Properties;
 
 public class TestReflect {
     public static void main(String[] args)
-            throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
+            throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException,
+            InvocationTargetException, InstantiationException, IOException {
         // 1 获取Class对象
         // 1.1 通过类名
         Class personClass = Person.class;
@@ -115,5 +121,73 @@ public class TestReflect {
         Person person8 = new Person();
         Object retValue8 = privateMethod.invoke(person8, "orange");
         System.out.println("retValue8 = "  + retValue8);  // eat orange
+
+        // 5 获取继承关系
+        // 5.1 获取父类
+        Class integerClass = Integer.class;
+        Class numberClass = integerClass.getSuperclass();
+        System.out.println("numberClass = " + numberClass);  // class java.lang.Number
+        Class objectClass = numberClass.getSuperclass();
+        System.out.println("objectClass = " + objectClass);  // class java.lang.Object
+        System.out.println(objectClass.getSuperclass());  // null  除Object外，其他任何非interface的Class都必定存在一个父类类型。
+
+        // 5.2 获取类实现的interface
+        Class[] integerInterfaces = integerClass.getInterfaces();  // 只有当前类直接实现的接口类型，不包括父类实现的
+        for (Class integerInterface : integerInterfaces) {
+            System.out.println("integerInterface = " + integerInterface);  // interface java.lang.Comparable
+        }
+        // 对所有interface的Class调用getSuperclass()返回的是null
+        System.out.println(Comparable.class.getSuperclass());  // null
+
+        // 5.3 继承关系
+        // 判断一个实例是否是某个类型时可以使用instanceof操作符；如果是两个Class实例，要判断一个向上转型是否成立，可以调用isAssignableFrom()
+        System.out.println(Number.class.isAssignableFrom(Integer.class));  // true
+        System.out.println(Object.class.isAssignableFrom(Integer.class));  // true
+        System.out.println(Double.class.isAssignableFrom(Integer.class));  // true
+
+        // 6 动态代理：可以在运行期动态创建某个interface的实例。
+        InvocationHandler handler = new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                System.out.println(method);  // public abstract void cn.shawda.testreflect.Hello.morning(java.lang.String)
+                if (method.getName().equals("morning")) {
+                    System.out.println("Good morning, " + args[0]);  // Good morning, Bob
+                }
+                return null;
+            }
+        };
+        Hello hello = (Hello) Proxy.newProxyInstance(
+                Hello.class.getClassLoader(),  // 传入ClassLoader
+                new Class[] { Hello.class },  // 传入要实现的接口
+                handler);  // 传入处理调用方法的InvocationHandler
+        hello.morning("Bob");
+
+        // 以上代码和下面的静态代码结果一致
+        HelloEveryone helloEveryone = new HelloEveryone();
+        helloEveryone.morning("Bob");  // Good morning, Bob
+
+        // 7 通过配置文件和反射机制实现任意方法执行
+        Properties properties = new Properties();
+        ClassLoader classLoader = TestReflect.class.getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream("names.properties");
+        properties.load(inputStream);
+
+        String className = properties.getProperty("className");
+        String methodName = properties.getProperty("methodName");
+        Class cls = Class.forName(className);
+        Object obj = cls.newInstance();
+        Method method = cls.getMethod(methodName);
+        System.out.println(method.invoke(obj));  // Hard hard study, day day up!
     }
+}
+
+class HelloEveryone implements Hello {
+    @Override
+    public void morning(String name) {
+        System.out.println("Good morning, " + name);
+    }
+}
+
+interface Hello {
+    void morning(String name);
 }

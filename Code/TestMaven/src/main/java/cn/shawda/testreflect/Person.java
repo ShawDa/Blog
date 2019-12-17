@@ -40,3 +40,9 @@ public class Person {
         return "eat " + num + " " + fruit;
     }
 }
+
+class Student {
+    public String study() {
+        return "Hard hard study, day day up!";
+    }
+}
