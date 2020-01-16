@@ -11,7 +11,8 @@
 [数据类型](Java基础/数据类型.md)  
 [面向对象](Java基础/面向对象.md)  
 [常用类](Java基础/常用类.md)  
-[反射](Java基础/反射.md)
+[反射](Java基础/反射.md)  
+[泛型](Java基础/泛型.md)
 
 ## 容器
 [Collection和Map](容器/Collection和Map.md)
