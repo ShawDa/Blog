@@ -7,7 +7,7 @@
 
 ### 2、Collection
 
-![](imgs\Collection.webp)
+![](imgs/Collection.webp)
 
 Collection 接口是 Set、Queue 和 List 的父接口：
 
@@ -31,5 +31,5 @@ Collection 接口中定义的方法主要有：添加元素 add、删除元素 r
 
 ### 3、Map
 
-![](imgs\Map.webp)
+![](imgs/Map.webp)
 

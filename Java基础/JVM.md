@@ -4,7 +4,7 @@ Java 虚拟机是一种能够运行 Java 字节码的虚拟机，它有自己完
 
 JVM 屏蔽了与具体操作系统平台相关的信息，使得程序只要能生成字节码就可以在多平台上不加修改的运行。
 
-![](imgs\JDK_JRE_JVM.jpg)
+![](imgs/JDK_JRE_JVM.jpg)
 
 上图展示了 JDK、JRE 和 JVM 之间的关系，JRE 由 JVM 和 一些类库组成，JDK 由 JRE 和 一些开发工具（如 javac.exe 等）组成。
 

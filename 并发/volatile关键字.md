@@ -8,7 +8,7 @@ Java 的 volatile 关键字保证了对各线程变量改变的可见性。
 
 
 
-![](imgs\java-volatile.png)
+![](imgs/java-volatile.png)
 
 ### 3、volatile 可见性保证
 
