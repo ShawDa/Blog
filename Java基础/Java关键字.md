@@ -46,7 +46,8 @@ https://blog.csdn.net/zhangqiluGrubby/article/details/80500505
 
 修饰一个类，其作用的范围是synchronized后面括号括起来的部分，作用主的对象是这个类的所有对象。
 
-### 5.volatile
+### 5.[volatile](../并发/volatile关键字.md)
+
 https://www.cnblogs.com/dolphin0520/p/3920373.html
 
 https://www.cnblogs.com/paddix/p/5428507.html

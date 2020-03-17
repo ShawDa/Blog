@@ -46,11 +46,52 @@ public class Test {
 
 #### Set
 
-
+Set 接口中定义的方法与 Collection 中基本一致，没有提供任何额外方法。不同之处只在于 Set 不允许包含相同的元素，若试图将两个相同的元素 add 进同一个 Set 中，那么会添加失败。 
 
 #### Queue
 
+Queue 被用来模拟队列这种数据结构，具有“先进先出”的特性。
+
+```java
+public class Test {
+    public static void main(String[] args) {
+        Queue<Integer> queue = new LinkedList<>();
+        Collections.addAll(queue, 1, 2, 3);  // [1, 2, 3]
+        queue.add(4);  // [1, 2, 3, 4]
+        queue.offer(5);  // [1, 2, 3, 4, 5]
+        queue.remove();  // [2, 3, 4, 5]
+        queue.poll();  // [3, 4, 5]
+        System.out.println(queue.element());  // 3 [3, 4, 5]
+        System.out.println(queue.peek());  // 3 [3, 4, 5]
+        System.out.println(queue);
+    }
+}
+```
+
 #### List
+
+List 代表一个元素有序、可重复的集合，集合中的每个元素都有其顺序索引。它允许使用重复元素，可以通过索引来访问指定位置的元素。
+
+相比于父接口，它在接口定义中多了以下的这些方法：
+
+```java
+public class Test {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        Collections.addAll(list, "1", "2", "3");
+        List<String> addAll = Arrays.asList("4", "5");
+        list.addAll(1, addAll);  // [1, 4, 5, 2, 3]
+        list.replaceAll(a -> a + 1);  // [11, 41, 51, 21, 31]
+        list.sort(String::compareTo);  // [11, 21, 31, 41, 51]
+        System.out.println(list.get(2));  // 31
+        list.set(3, "11");  // [11, 21, 31, 11, 51]
+        list.add(1, "66");  // [11, 66, 21, 31, 11, 51]
+        list.remove(5);  // [11, 66, 21, 31, 11]
+        System.out.println(list.indexOf("11"));  // 0
+        System.out.println(list.lastIndexOf("11"));  // 4
+    }
+}
+```
 
 
 
