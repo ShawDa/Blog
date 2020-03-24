@@ -111,7 +111,6 @@ volatile 关键字能保证变量的所有读取和写入都进入到主存中�
 
 ### Reference
 
-[Java Volatile关键字]([http://ifeve.com/java-volatile%e5%85%b3%e9%94%ae%e5%ad%97/](http://ifeve.com/java-volatile关键字/))
+[Java Volatile关键字](http://ifeve.com/java-volatile关键字/)
 
 [Java Volatile Keyword](http://tutorials.jenkov.com/java-concurrency/volatile.html)
-

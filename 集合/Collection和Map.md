@@ -63,7 +63,6 @@ public class Test {
         queue.poll();  // [3, 4, 5]
         System.out.println(queue.element());  // 3 [3, 4, 5]
         System.out.println(queue.peek());  // 3 [3, 4, 5]
-        System.out.println(queue);
     }
 }
 ```
@@ -98,6 +97,88 @@ public class Test {
 ### 3、Map
 
 ![](imgs/Map.webp)
+
+Map 用来保存具有映射关系的数据（key-value），key 不允许重复，必须是不可变类型，不允许有 equals 的两个对象。以下举例均基于 `JDK1.8`。
+
+#### Map 中的方法
+
+```java
+public interface Map<K, V> {
+    // 查询操作
+    int size();  // 键值对个数，超过int最大值按最大值算
+    int isEmpty();  // map是否不包含键值对
+    boolean containsKey(Object key);  // 是否包含key
+	boolean containsValue(Object value);  // 是否包含value
+    V get(Object key);  // 获得key对应的value
+    
+    // 修改操作
+    V put(K key, V value);  // 添加键值对，返回之前的value，若没有就返回null
+	V remove(Object key);  // 移除键值对，返回之前的value，若没有就返回null
+    
+    // 批量操作
+    void putAll(Map<? extends K, ? extends V> m);  // 批量添加键值对
+    void clear();  // 清空map
+    
+    // 视图
+    Set<K> keySet();  // key的set集合
+    Collection<V> values();  // value的集合
+    Set<Map.Entry<K, V>> entrySet();  // Map.Entry的set集合
+    interface Entry<K,V> {}
+    
+    // 比较和哈希
+    boolean equals(Object o);  // 两map的entrySet相同时equal
+    int hashCode();  // map的哈希值
+    
+    // 默认方法
+    default V getOrDefault(Object key, V defaultValue)；
+    default void forEach(BiConsumer<? super K, ? super V> action)；
+    default void replaceAll(BiFunction<? super K, ? super V, ? extends V> function)；
+    default V putIfAbsent(K key, V value)；
+    default boolean remove(Object key, Object value)；
+    default boolean replace(K key, V oldValue, V newValue)；
+    default V replace(K key, V value)；
+    default V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction);
+    default V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction);
+    default V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction);
+    default V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction);
+}
+```
+
+#### Map.Entry
+
+```java
+interface Entry<K,V> {
+    K getKey();
+    V getValue();
+    V setValue(V value);
+
+    boolean equals(Object o);
+    int hashCode();
+
+    public static <K extends Comparable<? super K>, V> Comparator<Map.Entry<K,V>> comparingByKey() {
+        return (Comparator<Map.Entry<K, V>> & Serializable)
+            (c1, c2) -> c1.getKey().compareTo(c2.getKey());
+    }
+
+    public static <K, V extends Comparable<? super V>> Comparator<Map.Entry<K,V>> comparingByValue() {
+        return (Comparator<Map.Entry<K, V>> & Serializable)
+            (c1, c2) -> c1.getValue().compareTo(c2.getValue());
+    }
+
+
+    public static <K, V> Comparator<Map.Entry<K, V>> comparingByKey(Comparator<? super K> cmp) {
+        Objects.requireNonNull(cmp);
+        return (Comparator<Map.Entry<K, V>> & Serializable)
+            (c1, c2) -> cmp.compare(c1.getKey(), c2.getKey());
+    }
+
+    public static <K, V> Comparator<Map.Entry<K, V>> comparingByValue(Comparator<? super V> cmp) {
+        Objects.requireNonNull(cmp);
+        return (Comparator<Map.Entry<K, V>> & Serializable)
+            (c1, c2) -> cmp.compare(c1.getValue(), c2.getValue());
+    }
+}
+```
 
 
 
