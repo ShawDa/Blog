@@ -130,7 +130,7 @@ public interface Map<K, V> {
     int hashCode();  // map的哈希值
     
     // 默认方法
-    default V getOrDefault(Object key, V defaultValue)；
+    default V getOrDefault(Object key, V defaultValue)； 
     default void forEach(BiConsumer<? super K, ? super V> action)；
     default void replaceAll(BiFunction<? super K, ? super V, ? extends V> function)；
     default V putIfAbsent(K key, V value)；
@@ -144,17 +144,55 @@ public interface Map<K, V> {
 }
 ```
 
+默认方法的用法：
+
+```java
+Map<String, Integer> map = new HashMap<>();
+map.put("1", 1);
+map.put("2", 2);
+System.out.println(map.getOrDefault("1", 0));  // 1
+System.out.println(map.getOrDefault("11", 0));  // 0
+
+map.forEach((s, integer) -> System.out.println(s + ":" + integer));  // 1:1 2:2
+map.replaceAll((s, integer) -> integer + 1);  // 替换所有的value值 1:2 2:3
+
+System.out.println(map.putIfAbsent("3", 3));  // 返回替换的值null 1:2 2:3 3:3
+System.out.println(map.putIfAbsent("1", 1));  // 返回未被替换的值2,原map内容不变
+
+System.out.println(map.remove("1", 1));  // false
+System.out.println(map.remove("1", 2));  // true 2:3 3:3
+
+System.out.println(map.replace("2", 2, 3));  // false 不存在这样的key:oldValue
+System.out.println(map.replace("2", 3, 4));  // true 2:4 3:3
+System.out.println(map.replace("1", 1));  // null
+System.out.println(map.replace("2", 2));  // 4 2:2 3:3
+
+System.out.println(map.computeIfAbsent("1", s -> Integer.parseInt(s) * 2));  // 2 1:2 2:2 3:3
+System.out.println(map.computeIfAbsent("2", s -> Integer.parseInt(s) * 2));  // 2 失败返回原有key的value值
+System.out.println(map.computeIfPresent("0", (s, integer) -> Integer.parseInt(s) * 2 + integer));  // null 找不到key失败返回null
+System.out.println(map.computeIfPresent("1", (s, integer) -> Integer.parseInt(s) * 2 + integer));  // 4 1:4 2:2 3:3
+System.out.println(map.compute("4", (s, integer) -> integer == null ? Integer.parseInt(s) + 10 : 100));  // 14 1:4 2:2 3:3 4:14
+System.out.println(map.compute("4", (s, integer) -> integer == null ? Integer.parseInt(s) + 10 : 100));  // 100 1:4 2:2 3:3 4:100
+
+System.out.println(map.merge("1", 1, (oldVal, newVal) -> oldVal + newVal * 2));  // 如果存在则根据新旧value计算新值 6 1:6 2:2 3:3 4:100
+System.out.println(map.merge("1", 1, (oldVal, newVal) -> null));  // 新值为null则删除key null 2:2 3:3 4:100
+System.out.println(map.merge("1", 1, (oldVal, newVal) -> oldVal + newVal * 2));  // 不存在则直接添加newVal,不做计算 1 1:1 2:2 3:3 4:100
+```
+
 #### Map.Entry
 
 ```java
 interface Entry<K,V> {
+    // getter、setter方法
     K getKey();
     V getValue();
     V setValue(V value);
-
+	
+    // 比较方法
     boolean equals(Object o);
     int hashCode();
-
+	
+    // 类静态方法
     public static <K extends Comparable<? super K>, V> Comparator<Map.Entry<K,V>> comparingByKey() {
         return (Comparator<Map.Entry<K, V>> & Serializable)
             (c1, c2) -> c1.getKey().compareTo(c2.getKey());
@@ -180,7 +218,7 @@ interface Entry<K,V> {
 }
 ```
 
-
+类静态方法的用法：
 
 ### 4、Relation
 

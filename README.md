@@ -15,8 +15,8 @@
 [反射](Java基础/反射.md)  
 [泛型](Java基础/泛型.md)
 
-## 容器
-[Collection和Map](容器/Collection和Map.md)
+## 集合
+[Collection和Map](集合/Collection和Map.md)
 
 ## 并发
 
