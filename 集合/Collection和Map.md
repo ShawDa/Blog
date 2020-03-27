@@ -220,6 +220,17 @@ interface Entry<K,V> {
 
 类静态方法的用法：
 
+```java
+Map<String, Integer> map = new HashMap<>();
+map.put("3", 1);
+map.put("1", 3);
+map.put("2", 5);  // {1=3, 2=5, 3=1}
+ArrayList<Map.Entry<String, Integer>> entries = new ArrayList<>(map.entrySet());
+entries.sort(Map.Entry.comparingByValue());  // [3=1, 1=3, 2=5]
+```
+
+
+
 ### 4、Relation
 
 ![](imgs/collection.png)

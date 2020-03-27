@@ -13,10 +13,13 @@
 [面向对象](Java基础/面向对象.md)  
 [常用类](Java基础/常用类.md)  
 [反射](Java基础/反射.md)  
-[泛型](Java基础/泛型.md)
+[泛型](Java基础/泛型.md)  
+[JVM](Java基础/JVM.md)
 
 ## 集合
-[Collection和Map](集合/Collection和Map.md)
+[Collection和Map](集合/Collection和Map.md)  
+[ArrayList](集合/ArrayList.md)  
+[LinkedList](集合/LinkedList.md)
 
 ## 并发
 
