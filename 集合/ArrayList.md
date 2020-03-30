@@ -231,3 +231,229 @@ E elementData(int index) {
     return (E) elementData[index];
 }
 ```
+
+#### set(int index, E element)
+
+在 index 位置放置元素，返回旧值。
+
+```java
+public E set(int index, E element) {
+    rangeCheck(index);
+
+    E oldValue = elementData(index);
+    elementData[index] = element;
+    return oldValue;
+}
+```
+
+#### add(E e)
+
+先看是否要扩容，再将元素放在 size 位置。
+
+```java
+public boolean add(E e) {
+    ensureCapacityInternal(size + 1);  // Increments modCount!!
+    elementData[size++] = e;
+    return true;
+}
+```
+
+先查看 index 是否合法，再看是否要扩容，之后将后面部分的元素后移一位，最后将元素放置 index 处。
+
+```java
+public void add(int index, E element) {
+    rangeCheckForAdd(index);
+
+    ensureCapacityInternal(size + 1);  // Increments modCount!!
+    System.arraycopy(elementData, index, elementData, index + 1,
+                     size - index);
+    elementData[index] = element;
+    size++;
+}
+
+private void rangeCheckForAdd(int index) {
+    if (index > size || index < 0)
+        throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+}
+```
+
+将入参中的集合添加到已有元素的后面。
+
+```java
+public boolean addAll(Collection<? extends E> c) {
+    Object[] a = c.toArray();
+    int numNew = a.length;
+    ensureCapacityInternal(size + numNew);  // Increments modCount
+    System.arraycopy(a, 0, elementData, size, numNew);  // 添加元素
+    size += numNew;
+    return numNew != 0;  // 若添加元素个数大于0则为true
+}
+```
+
+将入参中的集合添加到 index 处。
+
+```java
+public boolean addAll(int index, Collection<? extends E> c) {
+    rangeCheckForAdd(index);
+
+    Object[] a = c.toArray();
+    int numNew = a.length;
+    ensureCapacityInternal(size + numNew);  // Increments modCount
+
+    int numMoved = size - index;
+    if (numMoved > 0)  // 如果要移动的元素个数大于0
+        System.arraycopy(elementData, index, elementData, index + numNew,
+                         numMoved);
+
+    System.arraycopy(a, 0, elementData, index, numNew);  // 添加元素到index处
+    size += numNew;
+    return numNew != 0;
+}
+```
+
+#### remove(int index)
+
+移除 index 处的元素。
+
+```java
+public E remove(int index) {
+    rangeCheck(index);
+
+    modCount++;
+    E oldValue = elementData(index);
+
+    int numMoved = size - index - 1;
+    if (numMoved > 0)  // 如果不是移除的最后一个数就把后面的数前移一位
+        System.arraycopy(elementData, index+1, elementData, index,
+                         numMoved);
+    elementData[--size] = null; // clear to let GC do its work
+
+    return oldValue;  // 返回index处元素原值
+}
+```
+
+移除第一个对象。
+
+```java
+public boolean remove(Object o) {
+    if (o == null) {  // 为空时用==查找
+        for (int index = 0; index < size; index++)
+            if (elementData[index] == null) {
+                fastRemove(index);
+                return true;
+            }
+    } else {  // 不为空时用equals方法查找
+        for (int index = 0; index < size; index++)
+            if (o.equals(elementData[index])) {
+                fastRemove(index);
+                return true;
+            }
+    }
+    return false;  // 找不到就返回false
+}
+```
+
+快速移除元素的私有方法，不需要检查范围和返回旧值。
+
+```java
+private void fastRemove(int index) {
+    modCount++;
+    int numMoved = size - index - 1;
+    if (numMoved > 0)
+        System.arraycopy(elementData, index+1, elementData, index,
+                         numMoved);
+    elementData[--size] = null; // clear to let GC do its work
+}
+```
+
+移除一定范围内的元素，当 `（fromIndex < 0 || fromIndex >= size() || toIndex > size() || toIndex < fromIndex）`时抛出 `IndexOutOfBoundsException` 异常。
+
+```java
+protected void removeRange(int fromIndex, int toIndex) {
+    modCount++;
+    int numMoved = size - toIndex;
+    System.arraycopy(elementData, toIndex, elementData, fromIndex,
+                     numMoved);
+
+    // clear to let GC do its work
+    int newSize = size - (toIndex-fromIndex);
+    for (int i = newSize; i < size; i++) {
+        elementData[i] = null;
+    }
+    size = newSize;
+}
+```
+
+`batchRemove(Collection<?> c, boolean complement)`：根据入参集合批量删除或保留元素。
+
+```java
+public boolean removeAll(Collection<?> c) {
+    Objects.requireNonNull(c);
+    return batchRemove(c, false);  // List包含某个元素就删掉
+}
+
+public boolean retainAll(Collection<?> c) {
+    Objects.requireNonNull(c);
+    return batchRemove(c, true);  // List包含某个元素就保留
+}
+
+private boolean batchRemove(Collection<?> c, boolean complement) {
+    final Object[] elementData = this.elementData;  // 数组指向内存空间固定，值能改变
+    int r = 0, w = 0;
+    boolean modified = false;
+    try {
+        for (; r < size; r++)
+            if (c.contains(elementData[r]) == complement)  // 可能抛异常
+                elementData[w++] = elementData[r];
+    } finally {
+        // Preserve behavioral compatibility with AbstractCollection,
+        // even if c.contains() throws.
+        if (r != size) {  // 抛了异常，把后面的数前移
+            System.arraycopy(elementData, r,
+                             elementData, w,
+                             size - r);
+            w += size - r;
+        }
+        if (w != size) {  // size减少了
+            // clear to let GC do its work
+            for (int i = w; i < size; i++)
+                elementData[i] = null;
+            modCount += size - w;
+            size = w;
+            modified = true;
+        }
+    }
+    return modified;  // 如果没抛异常且size变化了就返回true
+}
+```
+
+`clear()`：移除 ArrayList 中的所有元素。
+
+```java
+public void clear() {
+    modCount++;
+
+    // clear to let GC do its work
+    for (int i = 0; i < size; i++)
+        elementData[i] = null;
+
+    size = 0;
+}
+```
+
+
+
+### 6、Fail-Fast机制
+
+```java
+public void sort(Comparator<? super E> c) {
+    final int expectedModCount = modCount;
+    Arrays.sort((E[]) elementData, 0, size, c);
+    if (modCount != expectedModCount) {
+        throw new ConcurrentModificationException();
+    }
+    modCount++;
+}
+```
+
+通过记录 modCount 参数来实现快速失败的机制，在面对并发的修改时会直接抛出 `ConcurrentModificationException` 异常。
