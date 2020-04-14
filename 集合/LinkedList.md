@@ -169,13 +169,13 @@ private E unlinkFirst(Node<E> f) {
     f.item = null;
     f.next = null; // help GC
     first = next;
-    if (next == null)
+    if (next == null)  // 如果只有一个节点
         last = null;
     else
-        next.prev = null;
+        next.prev = null;  // next为头结点
     size--;
     modCount++;
-    return element;
+    return element;  // 返回头结点值
 }
 ```
 
@@ -402,3 +402,143 @@ public int lastIndexOf(Object o) {
 ```
 
 #### 队列操作
+
+```java
+public E peek() {
+    final Node<E> f = first;
+    return (f == null) ? null : f.item;
+}
+
+public E element() {
+    return getFirst();
+}
+
+public E poll() {
+    final Node<E> f = first;
+    return (f == null) ? null : unlinkFirst(f);
+}
+
+public E remove() {
+    return removeFirst();
+}
+
+public boolean offer(E e) {
+    return add(e);
+}
+```
+
+#### 双向队列操作
+
+```java
+public boolean offerFirst(E e) {
+    addFirst(e);
+    return true;
+}
+
+public boolean offerLast(E e) {
+    addLast(e);
+    return true;
+}
+
+public E peekFirst() {
+    final Node<E> f = first;
+    return (f == null) ? null : f.item;
+}
+
+public E peekLast() {
+    final Node<E> l = last;
+    return (l == null) ? null : l.item;
+}
+
+public E pollFirst() {
+    final Node<E> f = first;
+    return (f == null) ? null : unlinkFirst(f);
+}
+
+public E pollLast() {
+    final Node<E> l = last;
+    return (l == null) ? null : unlinkLast(l);
+}
+
+public void push(E e) {
+    addFirst(e);
+}
+
+public E pop() {
+    return removeFirst();
+}
+
+public boolean removeFirstOccurrence(Object o) {
+    return remove(o);
+}
+
+public boolean removeLastOccurrence(Object o) {
+    if (o == null) {
+        for (Node<E> x = last; x != null; x = x.prev) {
+            if (x.item == null) {
+                unlink(x);
+                return true;
+            }
+        }
+    } else {
+        for (Node<E> x = last; x != null; x = x.prev) {
+            if (o.equals(x.item)) {
+                unlink(x);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+```
+
+#### 其他方法
+
+```java
+private LinkedList<E> superClone() {
+    try {
+        return (LinkedList<E>) super.clone();
+    } catch (CloneNotSupportedException e) {
+        throw new InternalError(e);
+    }
+}
+
+public Object clone() {
+    LinkedList<E> clone = superClone();
+
+    // Put clone into "virgin" state
+    clone.first = clone.last = null;
+    clone.size = 0;
+    clone.modCount = 0;
+
+    // Initialize clone with our elements
+    for (Node<E> x = first; x != null; x = x.next)
+        clone.add(x.item);
+
+    return clone;
+}
+
+public Object[] toArray() {
+    Object[] result = new Object[size];
+    int i = 0;
+    for (Node<E> x = first; x != null; x = x.next)
+        result[i++] = x.item;
+    return result;
+}
+
+public <T> T[] toArray(T[] a) {
+    if (a.length < size)
+        a = (T[])java.lang.reflect.Array.newInstance(
+        a.getClass().getComponentType(), size);
+    int i = 0;
+    Object[] result = a;
+    for (Node<E> x = first; x != null; x = x.next)
+        result[i++] = x.item;
+
+    if (a.length > size)
+        a[size] = null;
+
+    return a;
+}
+```
+
