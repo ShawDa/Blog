@@ -189,13 +189,13 @@ private E unlinkLast(Node<E> l) {
     l.item = null;
     l.prev = null; // help GC
     last = prev;
-    if (prev == null)
+    if (prev == null)  // 只有一个节点
         first = null;
     else
-        prev.next = null;
+        prev.next = null;  // prev为尾节点
     size--;
     modCount++;
-    return element;
+    return element;  // 返回尾节点值
 }
 ```
 
@@ -208,17 +208,17 @@ E unlink(Node<E> x) {
     final Node<E> next = x.next;
     final Node<E> prev = x.prev;
 
-    if (prev == null) {
+    if (prev == null) {  // 头结点
         first = next;
     } else {
-        prev.next = next;
+        prev.next = next;  // 前后连接
         x.prev = null;
     }
 
-    if (next == null) {
+    if (next == null) {  // 尾结点
         last = prev;
     } else {
-        next.prev = prev;
+        next.prev = prev;  // 后前连接
         x.next = null;
     }
 
@@ -235,28 +235,28 @@ E unlink(Node<E> x) {
 public E getFirst() {
     final Node<E> f = first;
     if (f == null)
-        throw new NoSuchElementException();
+        throw new NoSuchElementException();  // NoSuchElementException
     return f.item;
 }
 
 public E getLast() {
     final Node<E> l = last;
     if (l == null)
-        throw new NoSuchElementException();
+        throw new NoSuchElementException();  // NoSuchElementException
     return l.item;
 }
 
 public E removeFirst() {
     final Node<E> f = first;
     if (f == null)
-        throw new NoSuchElementException();
+        throw new NoSuchElementException();  // NoSuchElementException
     return unlinkFirst(f);
 }
 
 public E removeLast() {
     final Node<E> l = last;
     if (l == null)
-        throw new NoSuchElementException();
+        throw new NoSuchElementException();  // NoSuchElementException
     return unlinkLast(l);
 }
 
@@ -282,7 +282,7 @@ public boolean add(E e) {
 }
 
 public boolean remove(Object o) {
-    if (o == null) {
+    if (o == null) {  // null则找到它移除
         for (Node<E> x = first; x != null; x = x.next) {
             if (x.item == null) {
                 unlink(x);
@@ -291,7 +291,7 @@ public boolean remove(Object o) {
         }
     } else {
         for (Node<E> x = first; x != null; x = x.next) {
-            if (o.equals(x.item)) {
+            if (o.equals(x.item)) {  // 非null用equals比较
                 unlink(x);
                 return true;
             }
@@ -305,7 +305,7 @@ public void clear() {
     // - helps a generational GC if the discarded nodes inhabit
     //   more than one generation
     // - is sure to free memory even if there is a reachable Iterator
-    for (Node<E> x = first; x != null; ) {
+    for (Node<E> x = first; x != null; ) {  // 全部置空，方便GC
         Node<E> next = x.next;
         x.item = null;
         x.next = null;
@@ -325,12 +325,12 @@ public E get(int index) {
 Node<E> node(int index) {
     // assert isElementIndex(index);
 
-    if (index < (size >> 1)) {
+    if (index < (size >> 1)) {  // 前半部分
         Node<E> x = first;
         for (int i = 0; i < index; i++)
             x = x.next;
         return x;
-    } else {
+    } else {  // 后半部分
         Node<E> x = last;
         for (int i = size - 1; i > index; i--)
             x = x.prev;
@@ -343,16 +343,16 @@ public E set(int index, E element) {
     Node<E> x = node(index);
     E oldVal = x.item;
     x.item = element;
-    return oldVal;
+    return oldVal;  // 返回旧值
 }
 
 public void add(int index, E element) {
     checkPositionIndex(index);
 
-    if (index == size)
+    if (index == size)  // 最后add
         linkLast(element);
     else
-        linkBefore(element, node(index));
+        linkBefore(element, node(index));  // 在index处的节点前添加
 }
 
 public E remove(int index) {
@@ -366,8 +366,8 @@ public E remove(int index) {
 ```java
 public int indexOf(Object o) {
     int index = 0;
-    if (o == null) {
-        for (Node<E> x = first; x != null; x = x.next) {
+    if (o == null) {  // null用==
+        for (Node<E> x = first; x != null; x = x.next) {  // 从前到后
             if (x.item == null)
                 return index;
             index++;
@@ -385,7 +385,7 @@ public int indexOf(Object o) {
 public int lastIndexOf(Object o) {
     int index = size;
     if (o == null) {
-        for (Node<E> x = last; x != null; x = x.prev) {
+        for (Node<E> x = last; x != null; x = x.prev) {  // 从后到前
             index--;
             if (x.item == null)
                 return index;
@@ -404,25 +404,25 @@ public int lastIndexOf(Object o) {
 #### 队列操作
 
 ```java
-public E peek() {
+public E peek() {  // 队首
     final Node<E> f = first;
     return (f == null) ? null : f.item;
 }
 
-public E element() {
+public E element() {  // 队首，可能抛异常
     return getFirst();
 }
 
-public E poll() {
+public E poll() {  // 移除并返回队首
     final Node<E> f = first;
     return (f == null) ? null : unlinkFirst(f);
 }
 
-public E remove() {
+public E remove() {  // 移除并返回队首，可能抛异常
     return removeFirst();
 }
 
-public boolean offer(E e) {
+public boolean offer(E e) {  // 队尾add
     return add(e);
 }
 ```
@@ -430,49 +430,49 @@ public boolean offer(E e) {
 #### 双向队列操作
 
 ```java
-public boolean offerFirst(E e) {
+public boolean offerFirst(E e) {  // 队首添加
     addFirst(e);
     return true;
 }
 
-public boolean offerLast(E e) {
+public boolean offerLast(E e) {  // 队尾添加
     addLast(e);
     return true;
 }
 
-public E peekFirst() {
+public E peekFirst() {  // 队首值
     final Node<E> f = first;
     return (f == null) ? null : f.item;
 }
 
-public E peekLast() {
+public E peekLast() {  // 队尾值
     final Node<E> l = last;
     return (l == null) ? null : l.item;
 }
 
-public E pollFirst() {
+public E pollFirst() {  // 移除队首
     final Node<E> f = first;
     return (f == null) ? null : unlinkFirst(f);
 }
 
-public E pollLast() {
+public E pollLast() {  // 移除队尾
     final Node<E> l = last;
     return (l == null) ? null : unlinkLast(l);
 }
 
-public void push(E e) {
+public void push(E e) {  // 队首添加
     addFirst(e);
 }
 
-public E pop() {
+public E pop() {  // 队首移除
     return removeFirst();
 }
 
-public boolean removeFirstOccurrence(Object o) {
+public boolean removeFirstOccurrence(Object o) {  // 移除第一次出现的该对象
     return remove(o);
 }
 
-public boolean removeLastOccurrence(Object o) {
+public boolean removeLastOccurrence(Object o) {  // 移除最后一次出现的该对象
     if (o == null) {
         for (Node<E> x = last; x != null; x = x.prev) {
             if (x.item == null) {
@@ -507,7 +507,7 @@ public Object clone() {
     LinkedList<E> clone = superClone();
 
     // Put clone into "virgin" state
-    clone.first = clone.last = null;
+    clone.first = clone.last = null;  // 将superClone置空
     clone.size = 0;
     clone.modCount = 0;
 
@@ -518,7 +518,7 @@ public Object clone() {
     return clone;
 }
 
-public Object[] toArray() {
+public Object[] toArray() {  // 转数组
     Object[] result = new Object[size];
     int i = 0;
     for (Node<E> x = first; x != null; x = x.next)
@@ -535,7 +535,7 @@ public <T> T[] toArray(T[] a) {
     for (Node<E> x = first; x != null; x = x.next)
         result[i++] = x.item;
 
-    if (a.length > size)
+    if (a.length > size)  // 如果给定的数组长度大于链表长度
         a[size] = null;
 
     return a;
