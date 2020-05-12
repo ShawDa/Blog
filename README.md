@@ -1,10 +1,12 @@
 # Coding Records
 
 ## 个人小结
+
 [字节序](个人小结/字节序.md)  
 [并行和并发](个人小结/并行和并发.md)
 
 ## Java基础
+
 [Java关键字](Java基础/Java关键字.md)  
 [IDEA](Java基础/IDEA.md)  
 [Maven](Java基础/Maven.md)  
@@ -17,9 +19,13 @@
 [JVM](Java基础/JVM.md)
 
 ## 集合
+
 [Collection和Map](集合/Collection和Map.md)  
 [ArrayList](集合/ArrayList.md)  
-[LinkedList](集合/LinkedList.md)
+[LinkedList](集合/LinkedList.md)  
+[Vector](集合/Vector.md)  
+[Stack](集合/Stack.md)  
+[ArrayDeque](集合/ArrayDeque.md) 
 
 ## 并发
 
