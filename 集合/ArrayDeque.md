@@ -78,13 +78,14 @@ private void doubleCapacity() {  // 当新增数据导致头尾重合时就要do
     if (newCapacity < 0)
         throw new IllegalStateException("Sorry, deque too big");
     Object[] a = new Object[newCapacity];
-    System.arraycopy(elements, p, a, 0, r);
-    System.arraycopy(elements, 0, a, r, p);
-    elements = a;
+    System.arraycopy(elements, p, a, 0, r);  // 从头开始到最后移到a最前
+    System.arraycopy(elements, 0, a, r, p);  // 从最前到头移到上述的后面
+    elements = a;  // 头尾分别是0、n
     head = 0;
     tail = n;
 }
 
+// 将原来数组的元素拷贝到新数组，有序的（从头到尾）
 private <T> T[] copyElements(T[] a) {
     if (head < tail) {
         System.arraycopy(elements, head, a, 0, size());
@@ -103,7 +104,7 @@ private <T> T[] copyElements(T[] a) {
 public void addFirst(E e) {
     if (e == null)
         throw new NullPointerException();
-    elements[head = (head - 1) & (elements.length - 1)] = e;
+    elements[head = (head - 1) & (elements.length - 1)] = e;  // 取余，如果之前head为0，这里head为最后一位
     if (head == tail)
         doubleCapacity();
 }
@@ -111,8 +112,8 @@ public void addFirst(E e) {
 public void addLast(E e) {
     if (e == null)
         throw new NullPointerException();
-    elements[tail] = e;
-    if ( (tail = (tail + 1) & (elements.length - 1)) == head)
+    elements[tail] = e;  // 先赋tail值
+    if ( (tail = (tail + 1) & (elements.length - 1)) == head)  // 移动tail位置
         doubleCapacity();
 }
 
@@ -148,17 +149,17 @@ public E pollFirst() {
     if (result == null)
         return null;
     elements[h] = null;     // Must null out slot
-    head = (h + 1) & (elements.length - 1);
+    head = (h + 1) & (elements.length - 1);  // head向后移动一位取余
     return result;
 }
 
 public E pollLast() {
-    int t = (tail - 1) & (elements.length - 1);
+    int t = (tail - 1) & (elements.length - 1);  // taild向前移动一位取余
     @SuppressWarnings("unchecked")
     E result = (E) elements[t];
-    if (result == null)
+    if (result == null)  // 空队列
         return null;
-    elements[t] = null;
+    elements[t] = null;  // 最后一个数置空
     tail = t;
     return result;
 }
@@ -173,7 +174,7 @@ public E getFirst() {
 
 public E getLast() {
     @SuppressWarnings("unchecked")
-    E result = (E) elements[(tail - 1) & (elements.length - 1)];
+    E result = (E) elements[(tail - 1) & (elements.length - 1)];  // 位置是tail前一位取余
     if (result == null)
         throw new NoSuchElementException();
     return result;
@@ -199,7 +200,7 @@ public boolean removeFirstOccurrence(Object o) {
             delete(i);
             return true;
         }
-        i = (i + 1) & mask;
+        i = (i + 1) & mask;  // 从头到尾找
     }
     return false;
 }
@@ -215,7 +216,7 @@ public boolean removeLastOccurrence(Object o) {
             delete(i);
             return true;
         }
-        i = (i - 1) & mask;
+        i = (i - 1) & mask;  // 从尾到头找
     }
     return false;
 }
@@ -271,45 +272,45 @@ private boolean delete(int i) {
     final int mask = elements.length - 1;
     final int h = head;
     final int t = tail;
-    final int front = (i - h) & mask;
-    final int back  = (t - i) & mask;
+    final int front = (i - h) & mask;  // 相对于head的距离
+    final int back  = (t - i) & mask;  // 相对于tail的距离
 
     // Invariant: head <= i < tail mod circularity
-    if (front >= ((t - h) & mask))
+    if (front >= ((t - h) & mask))  // i不在数据范围内
         throw new ConcurrentModificationException();
 
     // Optimize for least element motion
-    if (front < back) {
+    if (front < back) {  // 比较靠前就head后移一位
         if (h <= i) {
             System.arraycopy(elements, h, elements, h + 1, front);
         } else { // Wrap around
-            System.arraycopy(elements, 0, elements, 1, i);
-            elements[0] = elements[mask];
-            System.arraycopy(elements, h, elements, h + 1, mask - h);
+            // ...i...tail...head...
+            System.arraycopy(elements, 0, elements, 1, i);  // 前i个后移一位将第一个覆盖
+            elements[0] = elements[mask];  // 最后一位到最前
+            System.arraycopy(elements, h, elements, h + 1, mask - h);  // head到最后第二位后移一位
         }
         elements[h] = null;
-        head = (h + 1) & mask;
+        head = (h + 1) & mask;  // 原head置空，新head为后一位
         return false;
-    } else {
+    } else {  // 比较靠后就tail前移一位
         if (i < t) { // Copy the null tail as well
             System.arraycopy(elements, i + 1, elements, i, back);
             tail = t - 1;
         } else { // Wrap around
-            System.arraycopy(elements, i + 1, elements, i, mask - i);
-            elements[mask] = elements[0];
-            System.arraycopy(elements, 1, elements, 0, t);
-            tail = (t - 1) & mask;
+            // ...tail...head...i...
+            System.arraycopy(elements, i + 1, elements, i, mask - i);  // i+1到最后前移一位
+            elements[mask] = elements[0];  // 最前一位到最后
+            System.arraycopy(elements, 1, elements, 0, t);  // 1到tail前移一位
+            tail = (t - 1) & mask;  // tial前移一位
         }
         return true;
     }
 }
 
 private void checkInvariants() {
-    assert elements[tail] == null;
-    assert head == tail ? elements[head] == null :
-    (elements[head] != null &&
-     elements[(tail - 1) & (elements.length - 1)] != null);
-    assert elements[(head - 1) & (elements.length - 1)] == null;
+    assert elements[tail] == null;  // tail为空
+    assert head == tail ? elements[head] == null : (elements[head] != null && elements[(tail - 1) & (elements.length - 1)] != null);  // deque为空或者最前最后的元素均存在
+    assert elements[(head - 1) & (elements.length - 1)] == null;  // head前一位为空
 }
 ```
 
@@ -317,7 +318,7 @@ private void checkInvariants() {
 
 ```java
 public int size() {
-    return (tail - head) & (elements.length - 1);
+    return (tail - head) & (elements.length - 1);  // 取余
 }
 
 public boolean isEmpty() {
@@ -330,7 +331,7 @@ public boolean contains(Object o) {
     int mask = elements.length - 1;
     int i = head;
     Object x;
-    while ( (x = elements[i]) != null) {
+    while ( (x = elements[i]) != null) {  // 从头到尾查
         if (o.equals(x))
             return true;
         i = (i + 1) & mask;
@@ -356,7 +357,7 @@ public void clear() {
     }
 }
 
-public Object[] toArray() {
+public Object[] toArray() {  // 转成数组，从头到尾
     return copyElements(new Object[size()]);
 }
 
