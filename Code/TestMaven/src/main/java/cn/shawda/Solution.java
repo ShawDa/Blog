@@ -3,13 +3,124 @@ package cn.shawda;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
+import java.util.TreeMap;
 
 class Solution {
     public static void main(String[] args) {
         System.out.println(Arrays.toString(new Solution().processQueries(new int[]{7,5,5,8,3}, 8)));
+        System.out.println(new Solution().halvesAreAlike("AbCdEfGh"));
+        System.out.println(new Solution().eatenApples(new int[]{3,0,0,0,0,10}, new int[]{3,0,0,0,0,10}));
+        System.out.println(Arrays.toString(new Solution().findBall(new int[][]{{1, 1, 1, -1, -1}, {1, 1, 1, -1, -1}, {-1, -1, -1, 1, 1}, {1, 1, 1, 1, -1}, {-1, -1, -1, -1, -1}})));
+    }
+
+    public int[] findBall(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[] res = new int[n];
+        for (int i = 0; i < n; i++) {
+            int y = i;
+            for (int[] ints : grid) {
+                int loc = ints[y];
+                if (loc == 1) {
+                    if (y + 1 >= n || ints[y + 1] != 1) {
+                        res[i] = -1;
+                        break;
+                    } else {
+                        y++;
+                    }
+                } else {
+                    if (y - 1 < 0 || ints[y - 1] != -1) {
+                        res[i] = -1;
+                        break;
+                    } else {
+                        y--;
+                    }
+                }
+                res[i] = y;
+            }
+        }
+        return res;
+    }
+
+    public int eatenApples(int[] apples, int[] days) {
+        int res = 0;
+        int length = apples.length;
+        Map<Integer, Integer> map = new TreeMap<>();  // 时间,苹果数目
+        for (int i = 0; i < length; i++) {
+            int count = days[i] + i;
+            map.put(count, map.getOrDefault(count, 0) + apples[i]);
+            Set<Integer> tmp = new HashSet<>();
+            for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+                if (entry.getKey() <= i || entry.getValue() == 0) {
+                    tmp.add(entry.getKey());
+                } else {
+                    map.put(entry.getKey(), entry.getValue() - 1);
+                    res++;
+                    break;
+                }
+            }
+            for (int integer : tmp) {
+                map.remove(integer);
+            }
+        }
+        int i = length;
+        while (!map.isEmpty()) {
+            Set<Integer> tmp = new HashSet<>();
+            for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+                if (entry.getKey() <= i || entry.getValue() == 0) {
+                    tmp.add(entry.getKey());
+                } else {
+                    map.put(entry.getKey(), entry.getValue() - 1);
+                    res++;
+                    break;
+                }
+            }
+            for (int integer : tmp) {
+                map.remove(integer);
+            }
+            i++;
+        }
+        return res;
+    }
+
+    public boolean halvesAreAlike(String s) {
+        Set<Character> set = new HashSet<>(16);
+        Collections.addAll(set, 'a', 'e','i','o','u','A','E','I','O','U');
+        int count0 = 0;
+        int count1 = 0;
+        int length = s.length();
+        for (int i = 0; i < length / 2; i++) {
+            if (set.contains(s.charAt(i))) {
+                count0++;
+            }
+            if (set.contains(s.charAt(length - 1 - i))) {
+                count1++;
+            }
+        }
+        return count0 == count1;
+    }
+
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 0; i < numRows; i++) {
+            List<Integer> list = new ArrayList<>();
+            for (int j = 0; j <= i; j++) {
+                if (j == 0 || j == i) {
+                    list.add(1);
+                    continue;
+                }
+                list.add(res.get(i - 1).get(j - 1) + res.get(i - 1).get(j));
+            }
+            res.add(list);
+        }
+        return res;
     }
 
     public String removeKdigits(String num, int k) {
