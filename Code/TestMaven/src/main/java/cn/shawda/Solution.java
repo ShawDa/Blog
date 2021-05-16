@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 class Solution {
     public static void main(String[] args) {
@@ -18,6 +20,137 @@ class Solution {
         System.out.println(new Solution().halvesAreAlike("AbCdEfGh"));
         System.out.println(new Solution().eatenApples(new int[]{3,0,0,0,0,10}, new int[]{3,0,0,0,0,10}));
         System.out.println(Arrays.toString(new Solution().findBall(new int[][]{{1, 1, 1, -1, -1}, {1, 1, 1, -1, -1}, {-1, -1, -1, 1, 1}, {1, 1, 1, 1, -1}, {-1, -1, -1, -1, -1}})));
+        System.out.println(new Solution().minDays(new int[]{1,10,2,9,3,8,4,7,5,6}, 4, 2));
+    }
+
+    public int maxSumMinProduct(int[] nums) {
+        int length = nums.length;
+        long[] sum = new long[length];
+        sum[0] = nums[0];
+        for (int i = 1; i < length; i++) {
+            sum[i] = sum[i - 1] + nums[i];
+        }
+        long[] res = new long[length];
+        for (int i = 0; i < length; i++) {
+            int num = nums[i];
+            int left = i;
+            while (left >= 0) {
+                if (nums[left] < num) {
+                    break;
+                }
+                left--;
+            }
+            int right = i;
+            while (right < length) {
+                if (nums[right] < num) {
+                    break;
+                }
+                right++;
+            }
+            res[i] = num * (left == -1 ? sum[right - 1] : sum[right - 1] - sum[left]);
+        }
+
+        return (int) (LongStream.of(res).max().orElse(0) % 1000000007);
+    }
+
+    public int maxSumMinProductTimeOut(int[] nums) {
+        int length = nums.length;
+        long[] res = new long[length];
+        for (int i = 0; i < length; i++) {
+            long min = Long.MAX_VALUE;
+            long sum = 0;
+            for (int j = i; j < length; j++) {
+                min = Math.min(min, nums[j]);
+                sum += nums[j];
+                res[i] = Math.max(min * sum, res[i]);
+            }
+        }
+        return (int) (LongStream.of(res).max().orElse(0) % 1000000007);
+    }
+
+    public int maxDistance(int[] nums1, int[] nums2) {
+        int res = 0;
+        int left = 0;
+        while (left < nums1.length) {
+            int start = left + res;
+            if (start >= nums2.length) {
+                break;
+            }
+            while (start < nums2.length && nums1[left] <= nums2[start]) {
+                start++;
+            }
+            res = Math.max(--start - left++, res);
+        }
+        return res;
+    }
+
+    public int maximumPopulation(int[][] logs) {
+        int[] counts = new int[100];
+        for (int[] log : logs) {
+            for (int i = log[0]; i < log[1]; i++) {
+                counts[i - 1950]++;
+            }
+        }
+        int indexOfMax = 0;
+        int max = 0;
+        for (int i = 0; i < 100; i++) {
+            if (counts[i] > max) {
+                max = counts[i];
+                indexOfMax = i;
+            }
+        }
+        return 1950 + indexOfMax;
+    }
+
+    public int minDays(int[] bloomDay, int m, int k) {
+        int length = bloomDay.length;
+        if (m * k > length) {
+            return -1;
+        }
+        int min = IntStream.of(bloomDay).min().orElse(1);
+        int max = IntStream.of(bloomDay).max().orElse(1);
+        while (min < max) {
+            int mid = min + (max - min) / 2;
+            if (isDayOk(bloomDay, m, k, mid)) {
+                max = mid;
+            } else {
+                min = mid + 1;
+            }
+        }
+        return min;
+    }
+
+    private boolean isDayOk(int[] bloomDay, int m, int k, int day) {
+        int flower = 0;
+        int flowers = 0;
+        for (int i = 0; i < bloomDay.length && flowers < m; i++) {
+            if (bloomDay[i] <= day) {
+                flower++;
+                if (flower == k) {
+                    flowers++;
+                    flower = 0;
+                }
+            } else {
+                flower = 0;
+            }
+        }
+        return flowers >= m;
+    }
+
+    public int removeDuplicates(int[] nums) {
+        int length = nums.length;
+        if (length <= 1) {
+            return length;
+        }
+        int slow = 1;
+        int fast = 1;
+        while (fast < length) {
+            if (nums[fast] != nums[fast - 1]) {
+                nums[slow++] = nums[fast];
+            }
+            fast++;
+        }
+        return slow;
     }
 
     public int[] findBall(int[][] grid) {
