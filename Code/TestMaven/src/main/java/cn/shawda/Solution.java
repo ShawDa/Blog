@@ -1,16 +1,6 @@
 package cn.shawda;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -21,6 +11,49 @@ class Solution {
         System.out.println(new Solution().eatenApples(new int[]{3,0,0,0,0,10}, new int[]{3,0,0,0,0,10}));
         System.out.println(Arrays.toString(new Solution().findBall(new int[][]{{1, 1, 1, -1, -1}, {1, 1, 1, -1, -1}, {-1, -1, -1, 1, 1}, {1, 1, 1, 1, -1}, {-1, -1, -1, -1, -1}})));
         System.out.println(new Solution().minDays(new int[]{1,10,2,9,3,8,4,7,5,6}, 4, 2));
+    }
+
+    public int maximumUnits(int[][] boxTypes, int truckSize) {
+        Arrays.sort(boxTypes, (o1, o2) -> o2[1] - o1[1]);
+        int res = 0;
+        for (int[] boxType : boxTypes) {
+            if (truckSize == 0) {
+                break;
+            }
+            int num = boxType[0];
+            if (truckSize >= num) {
+                res += boxType[1] * num;
+                truckSize -= num;
+            } else {
+                res += boxType[1] * truckSize;
+                truckSize = 0;
+            }
+        }
+        return res;
+    }
+
+    public boolean canFormArray(int[] arr, int[][] pieces) {
+        Map<Integer, int[]> map = new HashMap<>();
+        for (int[] piece : pieces) {
+            map.put(piece[0], piece);
+        }
+        List<Integer> list = new ArrayList<>(arr.length);
+        for (int num : arr) {
+            if (map.containsKey(num)) {
+                for (int i : map.get(num)) {
+                    list.add(i);
+                }
+            }
+        }
+        if (arr.length != list.size()) {
+            return false;
+        }
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] != list.get(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public int maxSumMinProduct(int[] nums) {
