@@ -13,6 +13,51 @@ class Solution {
         System.out.println(new Solution().minDays(new int[]{1,10,2,9,3,8,4,7,5,6}, 4, 2));
     }
 
+    public int firstBadVersion(int n) {
+        int left = 1;
+        int right = n;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (isBadVersion(mid)) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+
+    private boolean isBadVersion(int version) {
+        return false;
+    }
+
+    public int findMaxForm(String[] strs, int m, int n) {
+        int length = strs.length;
+        int[][][] res = new int[length + 1][m + 1][n + 1];
+        for (int i = 1; i <= length; i++) {
+            int[] zeroOne = getZeroOne(strs[i - 1]);
+            int zero = zeroOne[0];
+            int one = zeroOne[1];
+            for (int j = 0; j <= m; j++) {
+                for (int k = 0; k <= n; k++) {
+                    res[i][j][k] = res[i - 1][j][k];
+                    if (j >= zero && k >= one) {
+                        res[i][j][k] = Math.max(res[i][j][k], 1 + res[i - 1][j - zero][k - one]);
+                    }
+                }
+            }
+        }
+        return res[length][m][n];
+    }
+
+    private int[] getZeroOne(String string) {
+        int[] res = new int[2];
+        for (char c : string.toCharArray()) {
+            res[c - '0']++;
+        }
+        return res;
+    }
+
     public int maximumUnits(int[][] boxTypes, int truckSize) {
         Arrays.sort(boxTypes, (o1, o2) -> o2[1] - o1[1]);
         int res = 0;
