@@ -13,6 +13,45 @@ class Solution {
         System.out.println(new Solution().minDays(new int[]{1,10,2,9,3,8,4,7,5,6}, 4, 2));
     }
 
+    public int sumOddLengthSubarrays(int[] arr) {
+        int length = arr.length;
+        int res = 0;
+        for (int i = 0; i < length; i++) {
+            int leftOdd = (i + 1) / 2;
+            int rightOdd = (length - i) / 2;
+            int leftEven = i / 2 + 1;
+            int rightEven = (length - 1 - i) / 2 + 1;
+            res += arr[i] * (leftOdd * rightOdd + leftEven * rightEven);
+        }
+        return res;
+    }
+
+    public int[] rearrangeArray(int[] nums) {
+        Arrays.sort(nums);
+        int length = nums.length;
+        int[] res = new int[length];
+        int half = (length + 1) / 2;
+        int j = 0;
+        for (int i = 0; i < half; i++) {
+            res[j++] = nums[i];
+            if (i + half < length) {
+                res[j++] = nums[i + half];
+            }
+        }
+        return res;
+    }
+
+    public int repeatedNTimes(int[] A) {
+        for (int k = 1; k <= 3; ++k) {
+            for (int i = 0; i < A.length - k; ++i) {
+                if (A[i] == A[i+k]) {
+                    return A[i];
+                }
+            }
+        }
+        return 0;
+    }
+
     public int compress(char[] chars) {
         int n = chars.length;
         int write = 0, left = 0;
