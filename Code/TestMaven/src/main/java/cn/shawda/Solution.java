@@ -1,5 +1,6 @@
 package cn.shawda;
 
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -11,6 +12,23 @@ class Solution {
         System.out.println(new Solution().eatenApples(new int[]{3,0,0,0,0,10}, new int[]{3,0,0,0,0,10}));
         System.out.println(Arrays.toString(new Solution().findBall(new int[][]{{1, 1, 1, -1, -1}, {1, 1, 1, -1, -1}, {-1, -1, -1, 1, 1}, {1, 1, 1, 1, -1}, {-1, -1, -1, -1, -1}})));
         System.out.println(new Solution().minDays(new int[]{1,10,2,9,3,8,4,7,5,6}, 4, 2));
+    }
+
+    public int rand10() {
+        int first = 0;
+        int second = 0;
+        int sum = 0;
+        do {
+            first = rand7();
+            second = rand7();
+            sum = first + (second - 1) * 7;
+        } while (sum > 40);
+        return (sum - 1) % 10 + 1;
+    }
+
+    private int rand7() {
+        SecureRandom secureRandom = new SecureRandom();
+        return secureRandom.nextInt(7) + 1;
     }
 
     public int sumOddLengthSubarrays(int[] arr) {
