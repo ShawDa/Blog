@@ -12,6 +12,13 @@ class Solution {
         System.out.println(new Solution().eatenApples(new int[]{3,0,0,0,0,10}, new int[]{3,0,0,0,0,10}));
         System.out.println(Arrays.toString(new Solution().findBall(new int[][]{{1, 1, 1, -1, -1}, {1, 1, 1, -1, -1}, {-1, -1, -1, 1, 1}, {1, 1, 1, 1, -1}, {-1, -1, -1, -1, -1}})));
         System.out.println(new Solution().minDays(new int[]{1,10,2,9,3,8,4,7,5,6}, 4, 2));
+        System.out.println(new Solution().lengthOfLastWord("Hello World"));
+    }
+
+    public int lengthOfLastWord(String s) {
+        String trim = s.trim();
+        int i = trim.lastIndexOf(" ");
+        return trim.length() - i - 1;
     }
 
     public int rand10() {
