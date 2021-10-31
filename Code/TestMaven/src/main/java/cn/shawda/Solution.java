@@ -1,7 +1,18 @@
 package cn.shawda;
 
 import java.security.SecureRandom;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -13,6 +24,37 @@ class Solution {
         System.out.println(Arrays.toString(new Solution().findBall(new int[][]{{1, 1, 1, -1, -1}, {1, 1, 1, -1, -1}, {-1, -1, -1, 1, 1}, {1, 1, 1, 1, -1}, {-1, -1, -1, -1, -1}})));
         System.out.println(new Solution().minDays(new int[]{1,10,2,9,3,8,4,7,5,6}, 4, 2));
         System.out.println(new Solution().lengthOfLastWord("Hello World"));
+    }
+
+    public String[] findWords(String[] words) {
+        List<String> list = new LinkedList<>();
+        String rowIdx = "12210111011122000010020202";
+        for (String word : words) {
+            boolean isValid = true;
+            char idx = rowIdx.charAt(Character.toLowerCase(word.charAt(0)) - 'a');
+            for (int i = 1; i < word.length(); ++i) {
+                if (rowIdx.charAt(Character.toLowerCase(word.charAt(i)) - 'a') != idx) {
+                    isValid = false;
+                    break;
+                }
+            }
+            if (isValid) {
+                list.add(word);
+            }
+        }
+        return list.toArray(new String[0]);
+    }
+
+    public int countSegments(String s) {
+        int segmentCount = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            if ((i == 0 || s.charAt(i - 1) == ' ') && s.charAt(i) != ' ') {
+                segmentCount++;
+            }
+        }
+
+        return segmentCount;
     }
 
     public int lengthOfLastWord(String s) {
