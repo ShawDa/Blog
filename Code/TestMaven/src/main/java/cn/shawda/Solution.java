@@ -834,3 +834,26 @@ class TreeNode {
      TreeNode right;
      TreeNode(int x) { val = x; }
 }
+
+class MapSum {
+    private Map<String, Integer> map;
+    private Map<String, Integer> prefixMap;
+
+    public MapSum() {
+        map = new HashMap<>();
+        prefixMap = new HashMap<>();
+    }
+
+    public void insert(String key, int val) {
+        int delta = val - map.getOrDefault(key, 0);
+        map.put(key, val);
+        for (int i = 1; i <= key.length(); ++i) {
+            String curPrefix = key.substring(0, i);
+            prefixMap.put(curPrefix, prefixMap.getOrDefault(curPrefix, 0) + delta);
+        }
+    }
+
+    public int sum(String prefix) {
+        return prefixMap.getOrDefault(prefix, 0);
+    }
+}
