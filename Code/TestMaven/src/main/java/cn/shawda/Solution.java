@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -24,6 +25,18 @@ class Solution {
         System.out.println(Arrays.toString(new Solution().findBall(new int[][]{{1, 1, 1, -1, -1}, {1, 1, 1, -1, -1}, {-1, -1, -1, 1, 1}, {1, 1, 1, 1, -1}, {-1, -1, -1, -1, -1}})));
         System.out.println(new Solution().minDays(new int[]{1,10,2,9,3,8,4,7,5,6}, 4, 2));
         System.out.println(new Solution().lengthOfLastWord("Hello World"));
+    }
+
+    public int maxDepth(Node root) {
+        if (root == null) {
+            return 0;
+        }
+        if (root.children == null) {
+            return 1;
+        }
+        final int[] res = {0};
+        root.children.forEach(node -> res[0] = Math.max(maxDepth(node), res[0]));
+        return 1 + res[0];
     }
 
     public String[] findWords(String[] words) {
@@ -855,5 +868,21 @@ class MapSum {
 
     public int sum(String prefix) {
         return prefixMap.getOrDefault(prefix, 0);
+    }
+}
+
+class Node {
+    public int val;
+    public List<Node> children;
+
+    public Node() {}
+
+    public Node(int _val) {
+        val = _val;
+    }
+
+    public Node(int _val, List<Node> _children) {
+        val = _val;
+        children = _children;
     }
 }
