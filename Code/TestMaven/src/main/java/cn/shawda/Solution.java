@@ -11,9 +11,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.function.Consumer;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -25,6 +25,29 @@ class Solution {
         System.out.println(Arrays.toString(new Solution().findBall(new int[][]{{1, 1, 1, -1, -1}, {1, 1, 1, -1, -1}, {-1, -1, -1, 1, 1}, {1, 1, 1, 1, -1}, {-1, -1, -1, -1, -1}})));
         System.out.println(new Solution().minDays(new int[]{1,10,2,9,3,8,4,7,5,6}, 4, 2));
         System.out.println(new Solution().lengthOfLastWord("Hello World"));
+    }
+
+    public Solution() {
+
+    }
+
+    private ListNode head;
+    private Random random;
+
+    public Solution(ListNode head) {
+        this.head = head;
+        random = new Random();
+    }
+
+    public int getRandom() {
+        int count = 1;
+        int res = 0;
+        for (ListNode node = head; node != null; node = node.next) {
+            if (this.random.nextInt(count++) == 0) {
+                res = node.val;
+            }
+        }
+        return res;
     }
 
     public int maxDepth(Node root) {
@@ -885,4 +908,12 @@ class Node {
         val = _val;
         children = _children;
     }
+}
+
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode() {}
+    ListNode(int val) { this.val = val; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
 }
