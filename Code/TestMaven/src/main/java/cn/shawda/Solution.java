@@ -14,6 +14,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -25,6 +26,20 @@ class Solution {
         System.out.println(Arrays.toString(new Solution().findBall(new int[][]{{1, 1, 1, -1, -1}, {1, 1, 1, -1, -1}, {-1, -1, -1, 1, 1}, {1, 1, 1, 1, -1}, {-1, -1, -1, -1, -1}})));
         System.out.println(new Solution().minDays(new int[]{1,10,2,9,3,8,4,7,5,6}, 4, 2));
         System.out.println(new Solution().lengthOfLastWord("Hello World"));
+    }
+
+    public int sumOfUnique(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+        AtomicInteger res = new AtomicInteger();
+        map.forEach((integer, integer2) -> {
+            if (integer2 == 1) {
+                res.addAndGet(integer);
+            }
+        });
+        return res.get();
     }
 
     public Solution() {
