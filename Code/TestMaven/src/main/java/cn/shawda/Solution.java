@@ -28,6 +28,21 @@ class Solution {
         System.out.println(new Solution().lengthOfLastWord("Hello World"));
     }
 
+    private final String[] moss = new String[]{".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",
+            ".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."};
+
+    public int uniqueMorseRepresentations(String[] words) {
+        Set<String> set = new HashSet<>();
+        for (String word : words) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (char c : word.toCharArray()) {
+                stringBuilder.append(moss[c - 'a']);
+            }
+            set.add(stringBuilder.toString());
+        }
+        return set.size();
+    }
+
     public int sumOfUnique(int[] nums) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int num : nums) {
