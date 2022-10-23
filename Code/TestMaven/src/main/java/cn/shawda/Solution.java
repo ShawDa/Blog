@@ -28,6 +28,32 @@ class Solution {
         System.out.println(new Solution().lengthOfLastWord("Hello World"));
     }
 
+    public String mergeAlternately(String word1, String word2) {
+        int length1 = word1.length();
+        int length2 = word2.length();
+        int length = Math.min(length1, length2);
+        int i;
+        StringBuilder res = new StringBuilder(length1 + length2);
+        for (i = 0; i < length; i++) {
+            res.append(word1.charAt(i));
+            res.append(word2.charAt(i));
+        }
+
+        if (length1 > i) {
+            for (int j = i; j < length1; j++) {
+                res.append(word1.charAt(j));
+            }
+        }
+
+        if (length2 > i) {
+            for (int j = i; j < length2; j++) {
+                res.append(word2.charAt(j));
+            }
+        }
+
+        return res.toString();
+    }
+
     private final String[] moss = new String[]{".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",
             ".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."};
 
